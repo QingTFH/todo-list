@@ -1,4 +1,4 @@
-package token;
+package token.dataToken;
 
 public class FinishedToken {
 }

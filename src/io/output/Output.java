@@ -12,4 +12,8 @@ public class Output {
         System.out.println("输入示例: add -m content -d 2025-04-29 -h 17:00");
     }
 
+    public static void print(String out) {
+        System.out.println(out);
+    }
+
 }

@@ -1,8 +1,5 @@
 package token.command;
 
-import token.TodoToken;
-import token.TodoTokenFactory;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,9 +8,6 @@ public class Command {
 
     public enum Operator {
         stop, add, query, finish
-    }
-    public enum Option {
-        time, message
     }
     public static final Command POISON = new Command(Operator.stop);
 
@@ -54,6 +48,9 @@ public class Command {
                 String part = command[i];
                 if (part.startsWith("-")) {
                     String key = part.substring(1);
+                    if(i+1 == command.length) { // 最后时刻只有option没有context
+                        break;
+                    }
                     String value = command[i + 1];
                     cmd.options.put(key, value);
                     i += 2;

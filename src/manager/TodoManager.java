@@ -1,7 +1,8 @@
-package main;
+package manager;
 
-import token.TodoToken;
-import util.TodoUtil;
+import dao.Dao;
+import token.dataToken.TodoToken;
+import util.TimeUtil;
 
 import java.util.Comparator;
 import java.util.List;
@@ -12,7 +13,7 @@ public class TodoManager {
     private final List<TodoToken> todoList;;
 
     private TodoManager() { // 初始化
-        todoList = TodoUtil.loadTodo();
+        todoList = Dao.loadTodo();
     }
 
     public static TodoManager getInstance() {
@@ -22,32 +23,39 @@ public class TodoManager {
         return instance;
     }
 
-    public void add(TodoToken token) {
-        todoList.add(token);
-        save();
-    }
-
-    public boolean finish(int index) {
-        if (index < 0 || index >= todoList.size()) {
-            System.out.println("finish 越界");
-            return false;
-        }
-        todoList.remove(index);
-        save();
-        return true;
-    }
-
     public int size() {
         return todoList.size();
     }
 
-    public void sort() {
+    private void sort() {
         todoList.sort(Comparator.comparing(TodoToken::getDeadline));
     }
 
     public void save() {
         sort();
-        TodoUtil.saveTodo(todoList);
+        Dao.saveTodo(todoList);
+    }
+
+    /*---------- 外部操作 ----------*/
+
+    public void add(TodoToken token) {
+        todoList.add(token);
+        sort();
+        save();
+        System.out.println("add: "
+                + token.getContent()
+                + "; ddl: "
+                + token.getDeadline().format(TimeUtil.all_formatter));
+    }
+
+    public void finish(int index) {
+        if (index < 0 || index >= todoList.size()) {
+            System.out.println("finish 越界");
+        }
+        TodoToken token =  todoList.remove(index);
+        sort();
+        save();
+        System.out.println("finish: " + token.getContent());
     }
 
     public void query(int n) {

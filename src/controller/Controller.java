@@ -1,12 +1,10 @@
-package main;
+package controller;
 
-import io.input.Input;
-import token.TodoTokenFactory;
+import io.output.DebugOutput;
+import io.output.Output;
+import manager.TodoManager;
+import util.TodoTokenFactory;
 import token.command.Command;
-import token.TodoToken;
-import util.TodoUtil;
-
-import java.util.List;
 
 
 public class Controller {
@@ -42,9 +40,7 @@ public class Controller {
                 finishTodo(command);
             } break;
             default: {
-                new InterruptedException(
-                        "Controller::run 获得非法command")
-                        .printStackTrace();
+                DebugOutput.debugPrint("非法operator");
             }
         }
     }
@@ -77,14 +73,15 @@ public class Controller {
         // -n num 完成第n个(索引为n-1)
         String n = cmd.getOption("n");
         int num;
+
+        if(n == null && !cmd.getOthers().isEmpty()) { // 没有option的内容, 并且others里有内容
+            n = cmd.getOthers().get(0); // 试试看others里的行不行
+        }
         try {
             num = Integer.parseInt(n);
-        } catch (NumberFormatException ignored) {
-            System.out.println("finish因\"无参数\"而无效");
-            return;
-        }
-        if (manager.finish(num - 1)) {
-            System.out.println("finish");
+            manager.finish(num - 1);
+        } catch (NumberFormatException ignored) { // 不能被parseInt
+            Output.print("finish因\"无参数\"而无效");
         }
     }
 }

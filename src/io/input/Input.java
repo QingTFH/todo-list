@@ -1,6 +1,8 @@
 package io.input;
 
-import main.Controller;
+import controller.Controller;
+import io.output.DebugOutput;
+import io.output.Output;
 import token.command.Command;
 
 import java.io.InputStream;
@@ -36,7 +38,8 @@ public class Input {
             }
         } finally {
             end();
-            System.out.println("退出input");
+            DebugOutput.debugPrint("退出input");
+            Output.print("退出程序");
         }
     }
 
