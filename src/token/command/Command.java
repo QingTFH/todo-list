@@ -1,5 +1,7 @@
 package token.command;
 
+import exception.InputException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,17 +34,15 @@ public class Command {
     }
 
     public static class Parser {
-        public static Command parseCommand(String line) {
+        public static Command parseCommand(String line) throws InputException {
             String[] command = line.split("\\s+"); // 用空白符分割
-            Operator operator = parseOperator(command[0]);
 
-            if(operator == null) {
-                System.out.println("get wrong operator");
+            if(command[0] == null || command[0].isEmpty()) {
                 return null;
             }
 
+            Operator operator = parseOperator(command[0]);
             Command cmd = new Command(operator);
-
             int i = 1;
             while (i < command.length) {
                 String part = command[i];
@@ -62,7 +62,7 @@ public class Command {
             return cmd;
         }
 
-        private static Operator parseOperator(String s) {
+        private static Operator parseOperator(String s) throws InputException {
             switch (s.toLowerCase()) {
                 case "add" :
                     return Command.Operator.add;
@@ -73,7 +73,7 @@ public class Command {
                 case "stop" :
                     return Operator.stop;
                 default :
-                    return null;
+                    throw new InputException(s + " 指令不存在!");
             }
         }
     }

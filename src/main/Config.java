@@ -12,5 +12,4 @@ public class Config {
 
     public static TodoToken invalidToken = new TodoToken("", invalidTime);
 
-
 }

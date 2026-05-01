@@ -1,8 +1,10 @@
 package controller;
 
-import io.output.DebugOutput;
-import io.output.Output;
+import exception.InputException;
+import exception.LoadSaveException;
+import exception.WrongException;
 import manager.TodoManager;
+import util.ErrorUtil;
 import util.TodoTokenFactory;
 import token.command.Command;
 
@@ -12,40 +14,45 @@ public class Controller {
 
     TodoManager manager = TodoManager.getInstance();
 
-    public Controller() {}
+    public Controller() throws InputException, LoadSaveException {}
 
     public void run(Command command) {
         if(command == Command.POISON
                 || command.getCommandType() == Command.Operator.stop) {
             return;
         }
-        dispatch(command);
+
+        try {
+            dispatch(command);
+        } catch (WrongException | InputException | LoadSaveException e) {
+            e.print();
+        }
     }
 
-    public void end() {
+    public void end() throws LoadSaveException {
         manager.save();
         System.out.println("存储todoList");
     }
 
-    private void dispatch(Command command) {
+    private void dispatch(Command command) throws WrongException, InputException, LoadSaveException {
         Command.Operator operator = command.getCommandType();
         switch (operator) {
             case add : {
-                addTodo(command);
+                addTodo(command); // ls
             } break;
             case query : {
                 queryTodo(command);
             } break;
             case finish: {
-                finishTodo(command);
+                finishTodo(command); // in ls
             } break;
-            default: {
-                DebugOutput.debugPrint("非法operator");
+            default: { // wrong
+                throw new WrongException(ErrorUtil.getErrorMsg("Illegal Command operator"));
             }
         }
     }
 
-    private void addTodo(Command cmd) {
+    private void addTodo(Command cmd) throws LoadSaveException, InputException {
         // -m message
         // -d time_date
         // -h time_hour
@@ -69,7 +76,7 @@ public class Controller {
         }
     }
 
-    private void finishTodo(Command cmd) {
+    private void finishTodo(Command cmd) throws InputException, LoadSaveException {
         // -n num 完成第n个(索引为n-1)
         String n = cmd.getOption("n");
         int num;
@@ -80,8 +87,8 @@ public class Controller {
         try {
             num = Integer.parseInt(n);
             manager.finish(num - 1);
-        } catch (NumberFormatException ignored) { // 不能被parseInt
-            Output.print("finish因\"无参数\"而无效");
+        } catch (NumberFormatException e) {
+            throw new InputException("finish 无参数");
         }
     }
 }

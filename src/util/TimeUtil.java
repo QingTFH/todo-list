@@ -1,5 +1,6 @@
 package util;
 
+import exception.InputException;
 import main.Config;
 
 import java.time.LocalDate;
@@ -18,7 +19,7 @@ public class TimeUtil {
     public static DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern(dateMatter);
     public static DateTimeFormatter hour_formatter = DateTimeFormatter.ofPattern(hourMatter);
 
-    public static LocalDateTime parseTime(String time) {
+    public static LocalDateTime parseTime(String time) throws InputException {
         try { // 1. 匹配allMatter
             return LocalDateTime.parse(time, all_formatter);
         } catch (DateTimeParseException ignored) {}
@@ -35,11 +36,10 @@ public class TimeUtil {
         } catch (DateTimeParseException ignored) {}
 
         // 所有格式都不匹配
-        System.out.println("时间格式错误！");
-        return null;
+        throw new InputException(time + " 时间格式错误, 标准格式为2026-05-01 10:33");
     }
 
-    public static LocalDateTime parseTime(String date, String hour) {
+    public static LocalDateTime parseTime(String date, String hour) throws InputException {
         boolean dateEmpty = date == null || date.isEmpty();
         boolean hourEmpty = hour == null || hour.isEmpty();
 
