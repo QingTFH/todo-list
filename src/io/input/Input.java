@@ -3,7 +3,6 @@ package io.input;
 import controller.Controller;
 import exception.InputException;
 import exception.LoadSaveException;
-import exception.WrongException;
 import io.output.DebugOutput;
 import io.output.Output;
 import token.command.Command;
@@ -16,7 +15,7 @@ public class Input {
     private final Scanner scanner;
     private final Controller controller;
 
-    public Input(InputStream input) throws InputException, LoadSaveException { // 初始化失败干脆直接抛出
+    public Input(InputStream input) {
         scanner = new Scanner(input);
         controller = new Controller();
     }
@@ -53,7 +52,7 @@ public class Input {
         }
     }
 
-    private void end() throws LoadSaveException {
+    private void end() {
         controller.end();
     }
 

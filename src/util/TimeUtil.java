@@ -19,7 +19,7 @@ public class TimeUtil {
     public static DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern(dateMatter);
     public static DateTimeFormatter hour_formatter = DateTimeFormatter.ofPattern(hourMatter);
 
-    public static LocalDateTime parseTime(String time) throws InputException {
+    public static LocalDateTime parseTime(String time) {
         try { // 1. 匹配allMatter
             return LocalDateTime.parse(time, all_formatter);
         } catch (DateTimeParseException ignored) {}
@@ -39,7 +39,7 @@ public class TimeUtil {
         throw new InputException(time + " 时间格式错误, 标准格式为2026-05-01 10:33");
     }
 
-    public static LocalDateTime parseTime(String date, String hour) throws InputException {
+    public static LocalDateTime parseTime(String date, String hour) {
         boolean dateEmpty = date == null || date.isEmpty();
         boolean hourEmpty = hour == null || hour.isEmpty();
 

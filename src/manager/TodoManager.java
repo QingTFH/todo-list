@@ -15,11 +15,11 @@ public class TodoManager {
     private static TodoManager instance = null;
     private final List<TodoToken> todoList;;
 
-    private TodoManager() throws InputException, LoadSaveException { // 初始化
+    private TodoManager() { // 初始化
         todoList = Dao.loadTodo();
     }
 
-    public static TodoManager getInstance() throws InputException, LoadSaveException {
+    public static TodoManager getInstance() {
         if(instance == null) {
             instance = new TodoManager();
         }
@@ -34,14 +34,14 @@ public class TodoManager {
         todoList.sort(Comparator.comparing(TodoToken::getDeadline));
     }
 
-    public void save() throws LoadSaveException {
+    public void save() {
         sort();
         Dao.saveTodo(todoList);
     }
 
     /*---------- 外部操作 ----------*/
 
-    public void add(TodoToken token) throws LoadSaveException {
+    public void add(TodoToken token) {
         todoList.add(token);
         sort();
         save();
@@ -51,7 +51,7 @@ public class TodoManager {
                 + token.getDeadline().format(TimeUtil.all_formatter));
     }
 
-    public void finish(int index) throws InputException, LoadSaveException {
+    public void finish(int index) {
         if (index < 0 || index >= todoList.size()) {
             throw new InputException("finish索引越界");
         }

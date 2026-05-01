@@ -9,7 +9,7 @@ import java.util.List;
 public class Command {
 
     public enum Operator {
-        stop, add, query, finish
+        stop, add, query, finish, illegal
     }
     public static final Command POISON = new Command(Operator.stop);
 
@@ -34,7 +34,7 @@ public class Command {
     }
 
     public static class Parser {
-        public static Command parseCommand(String line) throws InputException {
+        public static Command parseCommand(String line) {
             String[] command = line.split("\\s+"); // 用空白符分割
 
             if(command[0] == null || command[0].isEmpty()) {
@@ -62,7 +62,7 @@ public class Command {
             return cmd;
         }
 
-        private static Operator parseOperator(String s) throws InputException {
+        private static Operator parseOperator(String s) {
             switch (s.toLowerCase()) {
                 case "add" :
                     return Command.Operator.add;

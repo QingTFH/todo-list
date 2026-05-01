@@ -1,6 +1,6 @@
 package exception;
 
-public class MyException extends Exception{
+public class MyException extends RuntimeException{
 
     private final String cause;
 

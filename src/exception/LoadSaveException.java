@@ -1,6 +1,6 @@
 package exception;
 
-public class LoadSaveException extends MyException{
+public class LoadSaveException extends MyException {
 
     public LoadSaveException(String cause) {
         super(cause);

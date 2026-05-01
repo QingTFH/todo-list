@@ -2,8 +2,10 @@ package main;
 
 import exception.InputException;
 import exception.LoadSaveException;
+import exception.WrongException;
 import io.input.Input;
 import io.output.Output;
+import util.ErrorUtil;
 
 public class MainClass {
 
@@ -13,7 +15,7 @@ public class MainClass {
             Input input = new Input(System.in);
             input.run();
         } catch (InputException | LoadSaveException e) {
-            e.print();
+            throw new WrongException("初始化失败");
         }
 
     }

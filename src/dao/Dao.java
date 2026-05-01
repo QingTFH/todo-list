@@ -2,9 +2,7 @@ package dao;
 
 import exception.InputException;
 import exception.LoadSaveException;
-import exception.WrongException;
 import token.dataToken.TodoToken;
-import util.ErrorUtil;
 import util.TodoUtil;
 
 import java.io.BufferedReader;
@@ -21,7 +19,7 @@ public class Dao {
     private static final String FILE_PATH = "todo.txt"; // 文件路径
 
     // 读取本地文件
-    public static List<TodoToken> loadTodo() throws LoadSaveException, InputException {
+    public static List<TodoToken> loadTodo() {
         List<TodoToken> todoList = new ArrayList<>();
         File file = new File(FILE_PATH);
 
@@ -49,7 +47,7 @@ public class Dao {
     }
 
     // 保存列表到本地文件
-    public static void saveTodo(List<TodoToken> todoList) throws LoadSaveException {
+    public static void saveTodo(List<TodoToken> todoList) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (TodoToken todo : todoList) {
                 bw.write(todo.toString());

@@ -6,7 +6,7 @@ import java.io.*;
 
 public class TodoUtil {
 
-    public static TodoToken parseTodoToken(String todoToken) throws InputException {
+    public static TodoToken parseTodoToken(String todoToken) {
         // ("ddl:" + deadline.format(Config.formatter) + "; content: " + content)
         int ddlBegin = todoToken.indexOf("ddl:") + "ddl:".length();
         int ddlEnd = todoToken.indexOf("; content: ");

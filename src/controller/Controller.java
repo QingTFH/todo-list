@@ -14,7 +14,7 @@ public class Controller {
 
     TodoManager manager = TodoManager.getInstance();
 
-    public Controller() throws InputException, LoadSaveException {}
+    public Controller() {}
 
     public void run(Command command) {
         if(command == Command.POISON
@@ -22,19 +22,15 @@ public class Controller {
             return;
         }
 
-        try {
-            dispatch(command);
-        } catch (WrongException | InputException | LoadSaveException e) {
-            e.print();
-        }
+        dispatch(command);
     }
 
-    public void end() throws LoadSaveException {
+    public void end() {
         manager.save();
         System.out.println("存储todoList");
     }
 
-    private void dispatch(Command command) throws WrongException, InputException, LoadSaveException {
+    private void dispatch(Command command) {
         Command.Operator operator = command.getCommandType();
         switch (operator) {
             case add : {
@@ -47,12 +43,12 @@ public class Controller {
                 finishTodo(command); // in ls
             } break;
             default: { // wrong
-                throw new WrongException(ErrorUtil.getErrorMsg("Illegal Command operator"));
+                throw new WrongException("Illegal Command operator");
             }
         }
     }
 
-    private void addTodo(Command cmd) throws LoadSaveException, InputException {
+    private void addTodo(Command cmd) {
         // -m message
         // -d time_date
         // -h time_hour
@@ -76,7 +72,7 @@ public class Controller {
         }
     }
 
-    private void finishTodo(Command cmd) throws InputException, LoadSaveException {
+    private void finishTodo(Command cmd) {
         // -n num 完成第n个(索引为n-1)
         String n = cmd.getOption("n");
         int num;
