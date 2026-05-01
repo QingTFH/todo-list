@@ -3,6 +3,7 @@ package io.input;
 import controller.Controller;
 import exception.InputException;
 import exception.LoadSaveException;
+import exception.WrongException;
 import io.output.DebugOutput;
 import io.output.Output;
 import token.command.Command;
@@ -40,7 +41,7 @@ public class Input {
                 }
 
                 controller.run(cmd);
-            } catch (InputException e) {
+            } catch (InputException | WrongException e) {
                 e.print();
             }
         }

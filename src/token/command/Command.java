@@ -9,8 +9,9 @@ import java.util.List;
 public class Command {
 
     public enum Operator {
-        stop, add, query, finish, illegal
+        stop, add, query, finish
     }
+
     public static final Command POISON = new Command(Operator.stop);
 
     private final Operator commandType;
