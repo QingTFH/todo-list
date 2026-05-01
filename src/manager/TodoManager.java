@@ -4,6 +4,7 @@ import dao.Dao;
 import exception.InputException;
 import exception.LoadSaveException;
 import exception.WrongException;
+import main.Config;
 import token.dataToken.TodoToken;
 import util.TimeUtil;
 
@@ -48,7 +49,7 @@ public class TodoManager {
         System.out.println("add: "
                 + token.getContent()
                 + "; ddl: "
-                + token.getDeadline().format(TimeUtil.all_formatter));
+                + token.getDeadline().format(Config.all_formatter));
     }
 
     public void finish(int index) {

@@ -6,18 +6,13 @@ import main.Config;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+import static main.Config.all_formatter;
+import static main.Config.date_formatter;
+import static main.Config.hour_formatter;
+
 public class TimeUtil {
-
-    public static String allMatter = "yyyy-MM-dd HH:mm";
-    public static String dateMatter = "yyyy-MM-dd";
-    public static String hourMatter = "HH:mm";
-
-    public static DateTimeFormatter all_formatter = DateTimeFormatter.ofPattern(allMatter);
-    public static DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern(dateMatter);
-    public static DateTimeFormatter hour_formatter = DateTimeFormatter.ofPattern(hourMatter);
 
     public static LocalDateTime parseTime(String time) {
         try { // 1. 匹配allMatter

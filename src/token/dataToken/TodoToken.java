@@ -1,6 +1,6 @@
 package token.dataToken;
 
-import util.TimeUtil;
+import main.Config;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +24,7 @@ public class TodoToken {
 
     @Override
     public String toString() {
-        return ("ddl:" + deadline.format(TimeUtil.all_formatter) + "; content: " + content);
+        return ("ddl:" + deadline.format(Config.all_formatter) + "; content: " + content);
     }
 
 

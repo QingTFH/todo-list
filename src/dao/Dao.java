@@ -14,9 +14,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static main.Config.FILE_PATH;
+
 public class Dao {
     // 数据助手
-    private static final String FILE_PATH = "todo.txt"; // 文件路径
 
     // 读取本地文件
     public static List<TodoToken> loadTodo() {

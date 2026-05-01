@@ -1,10 +1,8 @@
 package controller;
 
 import exception.InputException;
-import exception.LoadSaveException;
 import exception.WrongException;
 import manager.TodoManager;
-import util.ErrorUtil;
 import util.TodoTokenFactory;
 import token.command.Command;
 
@@ -27,7 +25,6 @@ public class Controller {
 
     public void end() {
         manager.save();
-        System.out.println("存储todoList");
     }
 
     private void dispatch(Command command) {

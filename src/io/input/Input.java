@@ -10,6 +10,8 @@ import token.command.Command;
 import java.io.InputStream;
 import java.util.Scanner;
 
+import static main.Config.CLI_PROMPT;
+
 public class Input {
 
     private final Scanner scanner;
@@ -24,7 +26,7 @@ public class Input {
 
         while (true) {
             try {
-                System.out.print("> ");
+                System.out.print(CLI_PROMPT);
                 String line = scanner.nextLine().trim();
                 if (line.isEmpty()) continue;
 
