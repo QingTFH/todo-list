@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Config {
 
-    public static final boolean debug = false;
+    public static final boolean debug = true;
 
     /* util */
     // todoUtil
@@ -28,5 +28,4 @@ public class Config {
     public static final String CLI_PROMPT = "> ";
     // output
     public static final String FIRST_PRINT = "输入示例: add -m content -d 2025-04-29 -h 17:00";
-
 }

@@ -1,12 +1,10 @@
 package manager;
 
-import dao.Dao;
+import dao.TodoDao;
 import exception.InputException;
-import exception.LoadSaveException;
-import exception.WrongException;
+import io.output.DebugOutput;
 import main.Config;
 import token.dataToken.TodoToken;
-import util.TimeUtil;
 
 import java.util.Comparator;
 import java.util.List;
@@ -17,7 +15,7 @@ public class TodoManager {
     private final List<TodoToken> todoList;;
 
     private TodoManager() { // 初始化
-        todoList = Dao.loadTodo();
+        todoList = TodoDao.loadTodo();
     }
 
     public static TodoManager getInstance() {
@@ -32,12 +30,13 @@ public class TodoManager {
     }
 
     private void sort() {
+        DebugOutput.debugPrint("sort");
         todoList.sort(Comparator.comparing(TodoToken::getDeadline));
     }
 
     public void save() {
         sort();
-        Dao.saveTodo(todoList);
+        TodoDao.saveTodo(todoList);
     }
 
     /*---------- 外部操作 ----------*/

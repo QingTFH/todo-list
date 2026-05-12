@@ -30,6 +30,11 @@ public class Command {
         return options.get(key);
     }
 
+    public String getOption(String key, String defaultValue) {
+        // 如果key不存在，返回默认值；存在就返回真实值
+        return options.getOrDefault(key, defaultValue);
+    }
+
     public List<String> getOthers() {
         return others;
     }
@@ -49,12 +54,14 @@ public class Command {
                 String part = command[i];
                 if (part.startsWith("-")) {
                     String key = part.substring(1);
-                    if(i+1 == command.length) { // 最后时刻只有option没有context
-                        break;
+                    boolean isNextParameter = ((i+1 != command.length) && ! command[i+1].startsWith("-"));
+                    if(isNextParameter) {
+                        cmd.options.put(key, command[i + 1]);
+                        i += 2;
+                    } else { // 下一项不是参数
+                        cmd.options.put(key, "");
+                        i++;
                     }
-                    String value = command[i + 1];
-                    cmd.options.put(key, value);
-                    i += 2;
                 } else {
                     cmd.others.add(part);
                     i++;
@@ -64,18 +71,14 @@ public class Command {
         }
 
         private static Operator parseOperator(String s) {
-            switch (s.toLowerCase()) {
-                case "add" :
-                    return Command.Operator.add;
-                case "query" :
-                    return Operator.query;
-                case "finish" :
-                    return Operator.finish;
-                case "stop" :
-                    return Operator.stop;
-                default :
-                    throw new InputException(s + " 指令不存在!");
+
+            for(Operator o : Operator.values()) {
+                if(o.toString().equals(s)) {
+                    return o;
+                }
             }
+
+            throw new InputException(s + " 指令不存在!");
         }
     }
 

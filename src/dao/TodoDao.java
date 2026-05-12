@@ -16,7 +16,7 @@ import java.util.List;
 
 import static main.Config.FILE_PATH;
 
-public class Dao {
+public class TodoDao {
     // 数据助手
 
     // 读取本地文件
