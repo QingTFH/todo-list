@@ -12,7 +12,7 @@ import java.util.List;
 public class TodoManager {
 
     private static TodoManager instance = null;
-    private final List<TodoToken> todoList;;
+    private final List<TodoToken> todoList;
 
     private TodoManager() { // 初始化
         todoList = TodoDao.loadTodo();
