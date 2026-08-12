@@ -25,6 +25,7 @@ public class Command {
         OPTION_ALIASES.put("content", "c");
         OPTION_ALIASES.put("all", "a");
         OPTION_ALIASES.put("finished", "f");
+        OPTION_ALIASES.put("importance", "i");
     }
 
     private final Operator commandType;

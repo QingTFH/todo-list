@@ -15,14 +15,14 @@ public class HelpHandler implements Handler {
 
     static {
         DOCS.put(Command.Operator.stop,   new OptionDoc("stop", "停止程序", null));
-        DOCS.put(Command.Operator.add,    new OptionDoc("add -m 内容 [-d 日期] [-h 时间]", "新增待办",
-                new String[][]{{"-m,--message", "设定内容"}, {"-d,--date", "设定日期"}, {"-h,--hour", "设定具体小时"}}));
+        DOCS.put(Command.Operator.add,    new OptionDoc("add -m 内容 [-d 日期] [-h 时间] [-i 重要度]", "新增待办",
+                new String[][]{{"-m,--message", "设定内容"}, {"-d,--date", "设定日期"}, {"-h,--hour", "设定具体小时"}, {"-i,--importance", "设定重要度(0~3, 缺省1)"}}));
         DOCS.put(Command.Operator.query,  new OptionDoc("query [-f|-a|-n num]", "查询待办, 加 -f 查询已完成",
                 new String[][]{{"-f,--finished", "查询已完成事项"}, {"-n,--num", "只查询前n条"}, {"-a,--all", "查询全部"}}));
         DOCS.put(Command.Operator.finish, new OptionDoc("finish num 或 finish -n num", "完成待办, 移入finish.txt",
                 new String[][]{{"-n,--num", "完成第n条"}}));
-        DOCS.put(Command.Operator.edit,   new OptionDoc("edit num 或 edit -n num [-c 内容] [-d 日期] [-h 时间]", "修改待办内容或ddl",
-                new String[][]{{"-n,--num", "待编辑序号"}, {"-c,--content", "新内容"}, {"-d,--date", "新日期"}, {"-h,--hour", "新时间"}}));
+        DOCS.put(Command.Operator.edit,   new OptionDoc("edit num 或 edit -n num [-c 内容] [-d 日期] [-h 时间] [-i 重要度]", "修改待办内容/ddl/重要度",
+                new String[][]{{"-n,--num", "待编辑序号"}, {"-c,--content", "新内容"}, {"-d,--date", "新日期"}, {"-h,--hour", "新时间"}, {"-i,--importance", "新重要度(0~3)"}}));
         DOCS.put(Command.Operator.delete, new OptionDoc("delete num 或 delete -n num", "彻底删除待办",
                 new String[][]{{"-n,--num", "删除第n条"}}));
         DOCS.put(Command.Operator.help,   new OptionDoc("help [指令名]", "显示指令帮助",

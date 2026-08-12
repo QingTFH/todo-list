@@ -8,6 +8,7 @@ import main.Config;
 import token.dataToken.TodoToken;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 
@@ -37,7 +38,16 @@ public class TodoManager {
 
     private void sort() {
         DebugOutput.debugPrint("sort");
-        todoList.sort(Comparator.comparing(TodoToken::getDeadline));
+        todoList.sort(Comparator.comparingDouble(TodoManager::priorityScore)
+                .reversed()
+                .thenComparing(TodoToken::getDeadline));
+    }
+
+    /** score = 重要度权重×重要度 + 反比例紧迫度；越大越优先 */
+    private static double priorityScore(TodoToken t) {
+        long days = ChronoUnit.DAYS.between(LocalDateTime.now(), t.getDeadline());
+        double urgency = (double) Config.URGENCY_SCALE / Math.max(days, 1); // 今天/超期取满值, 1天vs2天差一倍
+        return Config.IMPORTANCE_WEIGHT * t.getImportance() + urgency;
     }
 
     public void save() {
@@ -87,18 +97,20 @@ public class TodoManager {
         Output.print("delete: " + token.getContent());
     }
 
-    /** 编辑第 index 条：newContent / newDeadline 为 null 时保留原值 */
-    public void edit(int index, String newContent, LocalDateTime newDeadline) {
+    /** 编辑第 index 条：newContent / newDeadline / newImportance 为 null 时保留原值 */
+    public void edit(int index, String newContent, LocalDateTime newDeadline, Integer newImportance) {
         if(index < 0 || index >= todoList.size()) {
             throw new InputException("edit索引越界");
         }
         TodoToken old = todoList.get(index);
         String content = newContent != null ? newContent : old.getContent();
         LocalDateTime deadline = newDeadline != null ? newDeadline : old.getDeadline();
+        int importance = newImportance != null ? newImportance : old.getImportance();
 
-        todoList.set(index, new TodoToken(content, deadline));
+        todoList.set(index, new TodoToken(content, deadline, importance));
         save();
-        Output.print("edit: " + content + "; ddl: " + deadline.format(Config.ALL_FORMATTER));
+        Output.print("edit: " + content + "; ddl: " + deadline.format(Config.ALL_FORMATTER)
+                + "; 重要度: " + importance);
     }
 
     public void query(int n) {
@@ -113,11 +125,12 @@ public class TodoManager {
         queryItems(todoList.size());
     }
 
-    /** 打印前 count 条，count 超过列表长度时打印全部 */
+    /** 打印前 count 条，count 超过列表长度时打印全部，列出每条 score */
     private void queryItems(int count) {
         int limit = Math.min(count, todoList.size());
         for(int i = 0; i < limit; i++) {
-            Output.print((i + 1) + ": " + todoList.get(i));
+            TodoToken t = todoList.get(i);
+            Output.print((i + 1) + ": [score " + String.format("%.1f", priorityScore(t)) + "] " + t);
         }
     }
 

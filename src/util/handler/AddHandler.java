@@ -1,6 +1,7 @@
 package util.handler;
 
 import exception.InputException;
+import main.Config;
 import manager.TodoManager;
 import token.command.Command;
 import util.TodoTokenFactory;
@@ -23,8 +24,10 @@ public class AddHandler implements Handler {
         }
         String date = cmd.getOption("d");
         String hour = cmd.getOption("h");
+        Integer importance = Handler.importanceOf(cmd, "add");
 
-        TodoManager.getInstance().add(TodoTokenFactory.newToken(message, date, hour));
+        TodoManager.getInstance().add(TodoTokenFactory.newToken(
+                message, date, hour, importance != null ? importance : Config.DEFAULT_IMPORTANCE));
     }
 
 }

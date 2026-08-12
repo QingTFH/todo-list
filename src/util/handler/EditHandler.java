@@ -17,17 +17,19 @@ public class EditHandler implements Handler {
         String content = cmd.getOption("c");
         String date = cmd.getOption("d");
         String hour = cmd.getOption("h");
+        Integer importance = Handler.importanceOf(cmd, "edit");
 
         if(content != null && content.isEmpty()) {
             throw new InputException("edit -c 内容不能为空");
         }
-        if(content == null && date == null && hour == null) {
-            throw new InputException("edit至少需要修改内容(-c)或ddl(-d/-h)");
+        if(content == null && date == null && hour == null && importance == null) {
+            throw new InputException("edit至少需要修改内容(-c)、ddl(-d/-h)或重要度(-i)");
         }
 
         TodoManager.getInstance().edit(
                 index,
                 content,
-                date != null || hour != null ? TimeUtil.parseTime(date, hour) : null);
+                date != null || hour != null ? TimeUtil.parseTime(date, hour) : null,
+                importance);
     }
 }

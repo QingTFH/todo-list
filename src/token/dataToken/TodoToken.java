@@ -8,10 +8,16 @@ public class TodoToken {
 
     private final String content;
     private final LocalDateTime deadline;
+    private final int importance;
 
     public TodoToken(String content, LocalDateTime time) {
+        this(content, time, Config.DEFAULT_IMPORTANCE);
+    }
+
+    public TodoToken(String content, LocalDateTime time, int importance) {
         this.content = content;
         this.deadline = time;
+        this.importance = importance;
     }
 
     public String getContent() {
@@ -22,10 +28,13 @@ public class TodoToken {
         return deadline;
     }
 
-    @Override
-    public String toString() {
-        return ("ddl:" + deadline.format(Config.ALL_FORMATTER) + "; content: " + content);
+    public int getImportance() {
+        return importance;
     }
 
+    @Override
+    public String toString() {
+        return ("pri:" + importance + "; ddl:" + deadline.format(Config.ALL_FORMATTER) + "; content: " + content);
+    }
 
 }

@@ -21,6 +21,13 @@ public class Config {
     public static final LocalDateTime INVALID_TIME =
             LocalDateTime.of(1999, 1, 1, 1, 1);
 
+    /* priority: 重要度与紧急度加权 */
+    public static final int IMPORTANCE_MIN = 0;
+    public static final int IMPORTANCE_MAX = 3;
+    public static final int DEFAULT_IMPORTANCE = 1;
+    public static final int IMPORTANCE_WEIGHT = 3; // score 中重要度的权重
+    public static final int URGENCY_SCALE = 6;      // score 中紧迫度反比例常数
+
     /* io */
     // input
     public static final String CLI_PROMPT = "> ";
