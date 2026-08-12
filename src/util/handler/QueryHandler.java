@@ -13,8 +13,8 @@ public class QueryHandler implements Handler {
     @Override
     public void handle(Command cmd) {
         TodoManager manager = TodoManager.getInstance();
-        // 支持 query 详情 / query -详情 / query --detail 三种写法
-        boolean detail = cmd.getOption("详情") != null || cmd.getOthers().contains("详情");
+        // 详情: -d / -detail / --detail（别名 detail→d 归一）
+        boolean detail = cmd.getOption("d") != null;
 
         if(cmd.getOption("f") != null) {
             handleFinished(manager, cmd, detail);

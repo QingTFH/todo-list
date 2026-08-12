@@ -27,6 +27,7 @@ public class Config {
     public static final int DEFAULT_IMPORTANCE = 1;
     public static final int IMPORTANCE_WEIGHT = 3; // score 中重要度的权重
     public static final int URGENCY_SCALE = 6;      // score 中紧迫度反比例常数
+    public static final int CONTENT_COLUMN_CAP = 24; // query 中 content 列宽上限
 
     /* io */
     // input

@@ -24,6 +24,7 @@ public class Input {
     }
 
     public void run() {
+        Output.printWelcome();
 
         while (true) {
             try {

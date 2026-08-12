@@ -9,7 +9,7 @@ import io.output.Output;
 public class Main {
 
     public static void main(String[] args)  {
-        Output.printWelcome();
+
 
         try {
             Input input = new Input(System.in);
