@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TodoManager {
 
@@ -97,6 +98,26 @@ public class TodoManager {
         Output.print("delete: " + token.getContent());
     }
 
+    /** 一键完成所有已逾期任务 */
+    public void finishOverdue() {
+        List<TodoToken> overdue = overdueList();
+        for(TodoToken t : overdue) {
+            todoList.remove(t);
+            finishedList.add(t);
+            finishedCount++;
+        }
+        saveAll();
+        Output.print("finish 逾期任务 " + overdue.size() + " 条");
+    }
+
+    /** 一键删除所有已逾期任务 */
+    public void deleteOverdue() {
+        List<TodoToken> overdue = overdueList();
+        todoList.removeAll(overdue);
+        save();
+        Output.print("delete 逾期任务 " + overdue.size() + " 条");
+    }
+
     /** 编辑第 index 条：newContent / newDeadline / newImportance 为 null 时保留原值 */
     public void edit(int index, String newContent, LocalDateTime newDeadline, Integer newImportance) {
         if(index < 0 || index >= todoList.size()) {
@@ -117,12 +138,54 @@ public class TodoManager {
         if(n < 1) {
             throw new InputException("query -n 需要大于0");
         }
-        queryItems(n, detail);
+        renderQuery(Math.min(n, todoList.size()), detail);
     }
 
     public void query(boolean detail) {
         Output.print("size: " + size());
-        queryItems(todoList.size(), detail);
+        renderQuery(todoList.size(), detail);
+    }
+
+    /** 逾期按 ddl 升序、未逾期按 score 降序，分区展示，全局序号 */
+    private void renderQuery(int count, boolean detail) {
+        List<TodoToken> overdue = overdueList();
+        List<TodoToken> active = activeList();
+        int[] counter = {0};
+        int overdueCount = Math.min(count, overdue.size());
+        int activeCount = count - overdueCount;
+        printSection("[---------已逾期---------]", overdue.subList(0, overdueCount), detail, false, counter);
+        printSection("[---------未逾期---------]", active.subList(0, Math.min(activeCount, active.size())), detail, true, counter);
+    }
+
+    private void printSection(String header, List<TodoToken> items, boolean detail, boolean withScore, int[] counter) {
+        if(items.isEmpty()) {
+            return;
+        }
+        Output.print(header);
+        int colWidth = columnWidth(items);
+        String numFmt = "%" + String.valueOf(todoList.size()).length() + "d";
+        for(TodoToken t : items) {
+            Output.print(String.format(numFmt, ++counter[0]) + ": "
+                    + formatDisplay(t, detail, withScore, colWidth));
+        }
+    }
+
+    /** 逾期任务：按 ddl 升序 */
+    private List<TodoToken> overdueList() {
+        return todoList.stream()
+                .filter(t -> t.getDeadline().isBefore(LocalDateTime.now()))
+                .sorted(Comparator.comparing(TodoToken::getDeadline))
+                .collect(Collectors.toList());
+    }
+
+    /** 未逾期任务：按 score 降序，同分按 ddl 升序 */
+    private List<TodoToken> activeList() {
+        return todoList.stream()
+                .filter(t -> !t.getDeadline().isBefore(LocalDateTime.now()))
+                .sorted(Comparator.comparingDouble(TodoManager::priorityScore)
+                        .reversed()
+                        .thenComparing(TodoToken::getDeadline))
+                .collect(Collectors.toList());
     }
 
     /** 展示格式: content(定宽) ; ddl[: pri][: score]，score 仅待办查询提供 */
@@ -145,18 +208,6 @@ public class TodoManager {
             max = Math.max(max, displayWidth(t.getContent()));
         }
         return Math.min(max, Config.CONTENT_COLUMN_CAP);
-    }
-
-    /** 打印前 count 条，count 超过列表长度时打印全部；序号与 content 定宽对齐 */
-    private void queryItems(int count, boolean detail) {
-        int limit = Math.min(count, todoList.size());
-        List<TodoToken> shown = todoList.subList(0, limit);
-        int colWidth = columnWidth(shown);
-        String numFmt = "%" + String.valueOf(limit).length() + "d";
-        for(int i = 0; i < limit; i++) {
-            Output.print(String.format(numFmt, i + 1) + ": "
-                    + formatDisplay(shown.get(i), detail, true, colWidth));
-        }
     }
 
     /*---------- 已完成事项查询 ----------*/

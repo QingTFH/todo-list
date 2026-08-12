@@ -20,11 +20,11 @@ public class HelpHandler implements Handler {
         DOCS.put(Command.Operator.query,  new OptionDoc("query [-f|-a|-n num] [-d]", "查询待办, 加 -f 查询已完成",
                 new String[][]{{"-f,--finished", "查询已完成事项"}, {"-n,--num", "只查询前n条"}, {"-a,--all", "查询全部"}, {"-d,--detail", "额外展示pri与score"}}));
         DOCS.put(Command.Operator.finish, new OptionDoc("finish num 或 finish -n num", "完成待办, 移入finish.txt",
-                new String[][]{{"-n,--num", "完成第n条"}}));
+                new String[][]{{"-n,--num", "完成第n条"}, {"-o,--overdue", "一键完成所有已逾期任务"}}));
         DOCS.put(Command.Operator.edit,   new OptionDoc("edit num 或 edit -n num [-c 内容] [-d 日期] [-h 时间] [-i 重要度]", "修改待办内容/ddl/重要度",
                 new String[][]{{"-n,--num", "待编辑序号"}, {"-c,--content", "新内容"}, {"-d,--date", "新日期"}, {"-h,--hour", "新时间"}, {"-i,--importance", "新重要度(0~3)"}}));
         DOCS.put(Command.Operator.delete, new OptionDoc("delete num 或 delete -n num", "彻底删除待办",
-                new String[][]{{"-n,--num", "删除第n条"}}));
+                new String[][]{{"-n,--num", "删除第n条"}, {"-o,--overdue", "一键删除所有已逾期任务"}}));
         DOCS.put(Command.Operator.help,   new OptionDoc("help [指令名]", "显示指令帮助",
                 new String[][]{{"add", "例: help add 或 help -add"}}));
     }

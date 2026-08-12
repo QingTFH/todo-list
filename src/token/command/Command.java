@@ -27,6 +27,7 @@ public class Command {
         OPTION_ALIASES.put("finished", "f");
         OPTION_ALIASES.put("importance", "i");
         OPTION_ALIASES.put("detail", "d");
+        OPTION_ALIASES.put("overdue", "o");
     }
 
     private final Operator commandType;
