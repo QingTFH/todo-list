@@ -113,50 +113,62 @@ public class TodoManager {
                 + "; 重要度: " + importance);
     }
 
-    public void query(int n) {
+    public void query(int n, boolean detail) {
         if(n < 1) {
             throw new InputException("query -n 需要大于0");
         }
-        queryItems(n);
+        queryItems(n, detail);
     }
 
-    public void query() {
+    public void query(boolean detail) {
         Output.print("size: " + size());
-        queryItems(todoList.size());
+        queryItems(todoList.size(), detail);
     }
 
-    /** 打印前 count 条，count 超过列表长度时打印全部，列出每条 score */
-    private void queryItems(int count) {
+    /** 展示格式: content; ddl[: pri][: score]，score 仅待办查询提供 */
+    private String formatDisplay(TodoToken t, boolean detail, boolean withScore) {
+        StringBuilder sb = new StringBuilder(t.getContent()).append("; ddl:")
+                .append(t.getDeadline().format(Config.ALL_FORMATTER));
+        if(detail) {
+            sb.append("; pri:").append(t.getImportance());
+            if(withScore) {
+                sb.append("; score ").append(String.format("%.1f", priorityScore(t)));
+            }
+        }
+        return sb.toString();
+    }
+
+    /** 打印前 count 条，count 超过列表长度时打印全部 */
+    private void queryItems(int count, boolean detail) {
         int limit = Math.min(count, todoList.size());
         for(int i = 0; i < limit; i++) {
-            TodoToken t = todoList.get(i);
-            Output.print((i + 1) + ": [score " + String.format("%.1f", priorityScore(t)) + "] " + t);
+            Output.print((i + 1) + ": " + formatDisplay(todoList.get(i), detail, true));
         }
     }
 
     /*---------- 已完成事项查询 ----------*/
 
     /** 默认只展示前 DEFAULT_FINISHED_QUERY_LIMIT 条 */
-    public void queryFinished() {
-        queryFinished(Config.DEFAULT_FINISHED_QUERY_LIMIT);
+    public void queryFinished(boolean detail) {
+        queryFinished(Config.DEFAULT_FINISHED_QUERY_LIMIT, detail);
     }
 
-    public void queryFinished(int n) {
+    public void queryFinished(int n, boolean detail) {
         if(n < 1) {
             throw new InputException("query -f -n 需要大于0");
         }
-        printFinished(Math.min(n, finishedList.size()));
+        printFinished(Math.min(n, finishedList.size()), detail);
     }
 
-    public void queryFinishedAll() {
-        printFinished(finishedList.size());
+    public void queryFinishedAll(boolean detail) {
+        printFinished(finishedList.size(), detail);
     }
 
     /** 开头打印已完成事件数（用计数器），再列出前 count 条 */
-    private void printFinished(int count) {
+    private void printFinished(int count, boolean detail) {
         Output.print("已完成事件数：" + finishedCount);
         for(int i = 0; i < count; i++) {
-            Output.print((i + 1) + ": " + finishedList.get(i));
+            Output.print((i + 1) + ": " + formatDisplay(finishedList.get(i), detail, false));
         }
     }
 

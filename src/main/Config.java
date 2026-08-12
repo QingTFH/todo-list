@@ -31,6 +31,7 @@ public class Config {
     /* io */
     // input
     public static final String CLI_PROMPT = "> ";
-    // output
-    public static final String FIRST_PRINT = "输入示例: add -m content -d 2025-04-29 -h 17:00";
+
+    /* 启动语 */
+    public static final LocalDateTime START_TIME = LocalDateTime.of(2026, 4, 27, 0, 0); // 星海系统起航时间
 }
