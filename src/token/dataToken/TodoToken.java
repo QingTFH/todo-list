@@ -24,7 +24,7 @@ public class TodoToken {
 
     @Override
     public String toString() {
-        return ("ddl:" + deadline.format(Config.all_formatter) + "; content: " + content);
+        return ("ddl:" + deadline.format(Config.ALL_FORMATTER) + "; content: " + content);
     }
 
 

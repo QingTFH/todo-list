@@ -1,5 +1,6 @@
 package util.handler;
 
+import exception.InputException;
 import manager.TodoManager;
 import token.command.Command;
 import util.TodoTokenFactory;
@@ -17,6 +18,9 @@ public class AddHandler implements Handler {
 
     public void handle(Command cmd) {
         String message = cmd.getOption("m");
+        if(message == null || message.isEmpty()) {
+            throw new InputException("add缺少内容, 用法: add -m 内容 [-d 日期] [-h 时间]");
+        }
         String date = cmd.getOption("d");
         String hour = cmd.getOption("h");
 

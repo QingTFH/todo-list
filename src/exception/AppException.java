@@ -1,10 +1,10 @@
 package exception;
 
-public class MyException extends RuntimeException{
+public class AppException extends RuntimeException{
 
     private final String cause;
 
-    public MyException(String cause){
+    public AppException(String cause){
         this.cause = cause;
     }
 

@@ -1,6 +1,6 @@
 package exception;
 
-public class WrongException extends MyException {
+public class WrongException extends AppException {
 
     public WrongException(String s) {
         super(getErrorMsg(s));

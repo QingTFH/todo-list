@@ -6,7 +6,7 @@ import exception.WrongException;
 import io.input.Input;
 import io.output.Output;
 
-public class MainClass {
+public class Main {
 
     public static void main(String[] args)  {
         Output.printFirst();

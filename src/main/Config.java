@@ -1,7 +1,5 @@
 package main;
 
-import token.dataToken.TodoToken;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -10,18 +8,18 @@ public class Config {
     public static final boolean debug = true;
 
     /* util */
-    // todoUtil
-    public static final String FILE_PATH = "todo.txt"; // 文件路径
     // timeUtil
-    public static String allMatter = "yyyy-MM-dd HH:mm";
-    public static String dateMatter = "yyyy-MM-dd";
-    public static String hourMatter = "HH:mm";
-    public static DateTimeFormatter all_formatter = DateTimeFormatter.ofPattern(allMatter);
-    public static DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern(dateMatter);
-    public static DateTimeFormatter hour_formatter = DateTimeFormatter.ofPattern(hourMatter);
-    public static final LocalDateTime invalidTime =
+    public static final String FILE_PATH = "todo.txt"; // 待办文件路径
+    public static final String FINISH_FILE_PATH = "finish.txt"; // 已完成事项文件路径
+    public static final int DEFAULT_FINISHED_QUERY_LIMIT = 10; // query -f 默认展示条数
+    public static final String ALL_PATTERN = "yyyy-MM-dd HH:mm";
+    public static final String DATE_PATTERN = "yyyy-MM-dd";
+    public static final String HOUR_PATTERN = "HH:mm";
+    public static final DateTimeFormatter ALL_FORMATTER = DateTimeFormatter.ofPattern(ALL_PATTERN);
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN);
+    public static final DateTimeFormatter HOUR_FORMATTER = DateTimeFormatter.ofPattern(HOUR_PATTERN);
+    public static final LocalDateTime INVALID_TIME =
             LocalDateTime.of(1999, 1, 1, 1, 1);
-    public static final TodoToken invalidToken = new TodoToken("", invalidTime);
 
     /* io */
     // input

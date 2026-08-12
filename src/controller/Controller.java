@@ -4,6 +4,8 @@ import exception.WrongException;
 import manager.TodoManager;
 import token.command.Command;
 import util.handler.AddHandler;
+import util.handler.DeleteHandler;
+import util.handler.EditHandler;
 import util.handler.FinishHandler;
 import util.handler.Handler;
 import util.handler.QueryHandler;
@@ -21,11 +23,12 @@ public class Controller {
         handlers.put(Command.Operator.add, new AddHandler());
         handlers.put(Command.Operator.query, new QueryHandler());
         handlers.put(Command.Operator.finish, new FinishHandler());
+        handlers.put(Command.Operator.edit, new EditHandler());
+        handlers.put(Command.Operator.delete, new DeleteHandler());
     }
 
     public void run(Command command) {
-        if(command == Command.POISON
-                || command.getCommandType() == Command.Operator.stop) {
+        if(command.getCommandType() == Command.Operator.stop) {
             return;
         }
 
@@ -33,7 +36,7 @@ public class Controller {
     }
 
     public void end() {
-        manager.save();
+        manager.saveAll();
     }
 
     private void dispatch(Command command) {

@@ -8,25 +8,25 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
-import static main.Config.all_formatter;
-import static main.Config.date_formatter;
-import static main.Config.hour_formatter;
+import static main.Config.ALL_FORMATTER;
+import static main.Config.DATE_FORMATTER;
+import static main.Config.HOUR_FORMATTER;
 
 public class TimeUtil {
 
     public static LocalDateTime parseTime(String time) {
-        try { // 1. 匹配allMatter
-            return LocalDateTime.parse(time, all_formatter);
+        try { // 1. 匹配ALL_PATTERN
+            return LocalDateTime.parse(time, ALL_FORMATTER);
         } catch (DateTimeParseException ignored) {}
 
         try { // 2. 仅有日期 自动补00:00
-            LocalDate date = LocalDate.parse(time, date_formatter);
+            LocalDate date = LocalDate.parse(time, DATE_FORMATTER);
             return date.atStartOfDay();
         } catch (DateTimeParseException ignored) {}
 
 
         try { // 3. 仅有时间, 自动补今天的日期
-            LocalTime localTime = LocalTime.parse(time, hour_formatter);
+            LocalTime localTime = LocalTime.parse(time, HOUR_FORMATTER);
             return LocalDateTime.of(LocalDate.now(), localTime);
         } catch (DateTimeParseException ignored) {}
 
@@ -39,7 +39,7 @@ public class TimeUtil {
         boolean hourEmpty = hour == null || hour.isEmpty();
 
         if(dateEmpty && hourEmpty) {
-            return Config.invalidTime;
+            return Config.INVALID_TIME;
         }
 
         if(dateEmpty) {

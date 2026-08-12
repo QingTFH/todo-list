@@ -9,10 +9,8 @@ import java.util.List;
 public class Command {
 
     public enum Operator {
-        stop, add, query, finish
+        stop, add, query, finish, edit, delete
     }
-
-    public static final Command POISON = new Command(Operator.stop);
 
     private final Operator commandType;
     private final HashMap<String, String> options = new HashMap<>();
@@ -30,11 +28,6 @@ public class Command {
         return options.get(key);
     }
 
-    public String getOption(String key, String defaultValue) {
-        // 如果key不存在，返回默认值；存在就返回真实值
-        return options.getOrDefault(key, defaultValue);
-    }
-
     public List<String> getOthers() {
         return others;
     }
@@ -43,7 +36,7 @@ public class Command {
         public static Command parseCommand(String line) {
             String[] command = line.split("\\s+"); // 用空白符分割
 
-            if(command[0] == null || command[0].isEmpty()) {
+            if(command[0].isEmpty()) {
                 return null;
             }
 

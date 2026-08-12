@@ -1,6 +1,6 @@
 package exception;
 
-public class InputException extends MyException{
+public class InputException extends AppException{
 
     public InputException(String cause) {
         super(cause);
