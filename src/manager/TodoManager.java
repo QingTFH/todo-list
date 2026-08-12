@@ -9,6 +9,7 @@ import token.dataToken.TodoToken;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,19 @@ public class TodoManager {
     private final List<TodoToken> todoList;
     private final List<TodoToken> finishedList;
     private int finishedCount; // 已完成事件数，finish 时递增，避免每次统计
+    private State snapshotBefore; // 上一步修改前的状态，供 undo 恢复
+
+    /** 一次修改前的完整状态快照（Token 不可变，浅拷贝列表即可） */
+    private static class State {
+        final List<TodoToken> todo;
+        final List<TodoToken> finished;
+        final int finishedCount;
+        State(List<TodoToken> todo, List<TodoToken> finished, int finishedCount) {
+            this.todo = todo;
+            this.finished = finished;
+            this.finishedCount = finishedCount;
+        }
+    }
 
     private TodoManager() { // 初始化
         todoList = TodoDao.loadTodo();
@@ -66,9 +80,32 @@ public class TodoManager {
         saveFinished();
     }
 
+    /*---------- 撤销 ----------*/
+
+    /** 记录当前状态，供 undo 恢复 */
+    private void recordSnapshot() {
+        snapshotBefore = new State(new ArrayList<>(todoList), new ArrayList<>(finishedList), finishedCount);
+    }
+
+    /** 撤销上一步修改（仅一步） */
+    public void undo() {
+        if(snapshotBefore == null) {
+            throw new InputException("没有可撤销的操作");
+        }
+        todoList.clear();
+        todoList.addAll(snapshotBefore.todo);
+        finishedList.clear();
+        finishedList.addAll(snapshotBefore.finished);
+        finishedCount = snapshotBefore.finishedCount;
+        snapshotBefore = null; // 只支持撤销一步
+        saveAll();
+        Output.print("已撤销上一步操作");
+    }
+
     /*---------- 外部操作 ----------*/
 
     public void add(TodoToken token) {
+        recordSnapshot();
         todoList.add(token);
         save();
         Output.print("add: "
@@ -81,6 +118,7 @@ public class TodoManager {
         if (index < 0 || index >= todoList.size()) {
             throw new InputException("finish索引越界");
         }
+        recordSnapshot();
         TodoToken token = todoList.remove(index);
         finishedList.add(token);
         finishedCount++;
@@ -93,6 +131,7 @@ public class TodoManager {
         if(index < 0 || index >= todoList.size()) {
             throw new InputException("delete索引越界");
         }
+        recordSnapshot();
         TodoToken token = todoList.remove(index);
         save();
         Output.print("delete: " + token.getContent());
@@ -101,6 +140,11 @@ public class TodoManager {
     /** 一键完成所有已逾期任务 */
     public void finishOverdue() {
         List<TodoToken> overdue = overdueList();
+        if(overdue.isEmpty()) {
+            Output.print("finish 逾期任务 0 条");
+            return;
+        }
+        recordSnapshot();
         for(TodoToken t : overdue) {
             todoList.remove(t);
             finishedList.add(t);
@@ -113,6 +157,11 @@ public class TodoManager {
     /** 一键删除所有已逾期任务 */
     public void deleteOverdue() {
         List<TodoToken> overdue = overdueList();
+        if(overdue.isEmpty()) {
+            Output.print("delete 逾期任务 0 条");
+            return;
+        }
+        recordSnapshot();
         todoList.removeAll(overdue);
         save();
         Output.print("delete 逾期任务 " + overdue.size() + " 条");
@@ -123,6 +172,7 @@ public class TodoManager {
         if(index < 0 || index >= todoList.size()) {
             throw new InputException("edit索引越界");
         }
+        recordSnapshot();
         TodoToken old = todoList.get(index);
         String content = newContent != null ? newContent : old.getContent();
         LocalDateTime deadline = newDeadline != null ? newDeadline : old.getDeadline();
@@ -142,7 +192,7 @@ public class TodoManager {
     }
 
     public void query(boolean detail) {
-        Output.print("size: " + size());
+        Output.print("待办事件数：" + size());
         renderQuery(todoList.size(), detail);
     }
 
@@ -228,13 +278,16 @@ public class TodoManager {
         printFinished(finishedList.size(), detail);
     }
 
-    /** 开头打印已完成事件数（用计数器），再列出前 count 条 */
+    /** 开头打印已完成事件数（用计数器），再按 ddl 降序列出前 count 条（越晚越先） */
     private void printFinished(int count, boolean detail) {
         Output.print("已完成事件数：" + finishedCount);
-        List<TodoToken> shown = finishedList.subList(0, count);
+        List<TodoToken> shown = finishedList.stream()
+                .sorted(Comparator.comparing(TodoToken::getDeadline).reversed())
+                .limit(count)
+                .collect(Collectors.toList());
         int colWidth = columnWidth(shown);
         String numFmt = "%" + String.valueOf(count).length() + "d";
-        for(int i = 0; i < count; i++) {
+        for(int i = 0; i < shown.size(); i++) {
             Output.print(String.format(numFmt, i + 1) + ": "
                     + formatDisplay(shown.get(i), detail, false, colWidth));
         }

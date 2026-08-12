@@ -27,6 +27,7 @@ public class HelpHandler implements Handler {
                 new String[][]{{"-n,--num", "删除第n条"}, {"-o,--overdue", "一键删除所有已逾期任务"}}));
         DOCS.put(Command.Operator.help,   new OptionDoc("help [指令名]", "显示指令帮助",
                 new String[][]{{"add", "例: help add 或 help -add"}}));
+        DOCS.put(Command.Operator.undo,   new OptionDoc("undo", "撤销上一步修改", null));
     }
 
     @Override

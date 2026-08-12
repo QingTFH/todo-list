@@ -11,7 +11,7 @@ import java.util.Set;
 public class Command {
 
     public enum Operator {
-        stop, add, query, finish, edit, delete, help
+        stop, add, query, finish, edit, delete, help, undo
     }
 
     /** 长选项别名 → 短选项(规范名)。输入 -m/--message/-message 都解析为 m */
