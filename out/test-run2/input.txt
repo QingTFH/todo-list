@@ -1,0 +1,7 @@
+add --message long-task --date 2026-02-02
+finish --num 1
+edit 1 -content edited-long
+query --finished
+query
+help --num
+stop

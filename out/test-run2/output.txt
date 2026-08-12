@@ -1,0 +1,29 @@
+stop, add, query, finish, edit, delete, help, 
+输入示例: add -m content -d 2025-04-29 -h 17:00
+> [Debug] sort
+add: long-task; ddl: 2026-02-02 00:00
+> [Debug] sort
+finish: long-task
+> [Debug] sort
+edit: edited-long; ddl: 2026-05-20 00:00
+> 已完成事件数：1
+1: ddl:2026-02-02 00:00; content: long-task
+> size: 6
+1: ddl:2026-05-20 00:00; content: edited-long
+2: ddl:2026-05-29 00:00; content: os-lab5瀹為獙鎶ュ憡
+3: ddl:2026-05-31 00:00; content: 蹇冪悊鍋ュ悍
+4: ddl:2026-05-31 00:00; content: 褰㈢瓥澶т綔涓?
+5: ddl:2026-05-31 23:00; content: 浜ら?氬缓绛戝ぇ浣滀笟
+6: ddl:2026-06-14 00:00; content: 鑸澶т綔涓?
+> 可用指令:
+  stop  停止程序
+  add -m 内容 [-d 日期] [-h 时间]  新增待办
+  query [-f|-a|-n num]  查询待办, 加 -f 查询已完成
+  finish num 或 finish -n num  完成待办, 移入finish.txt
+  edit num 或 edit -n num [-c 内容] [-d 日期] [-h 时间]  修改待办内容或ddl
+  delete num 或 delete -n num  彻底删除待办
+  help [指令名]  显示指令帮助
+输入 "help <指令名>" 或 "help -<指令名>" 查看某指令的参数
+> [Debug] sort
+[Debug] 退出input
+退出程序

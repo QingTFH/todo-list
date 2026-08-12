@@ -8,6 +8,7 @@ import util.handler.DeleteHandler;
 import util.handler.EditHandler;
 import util.handler.FinishHandler;
 import util.handler.Handler;
+import util.handler.HelpHandler;
 import util.handler.QueryHandler;
 
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class Controller {
         handlers.put(Command.Operator.finish, new FinishHandler());
         handlers.put(Command.Operator.edit, new EditHandler());
         handlers.put(Command.Operator.delete, new DeleteHandler());
+        handlers.put(Command.Operator.help, new HelpHandler());
     }
 
     public void run(Command command) {
